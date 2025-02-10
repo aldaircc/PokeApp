@@ -12,7 +12,7 @@ struct PokemonListView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            List {
                 ForEach(vm.pokemons, id: \.name) { pokemon in
                     NavigationLink(pokemon.name) {
                         DetailView(vm: DetailPresenter(pokemon: pokemon.name))
