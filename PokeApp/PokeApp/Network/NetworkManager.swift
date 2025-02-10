@@ -7,8 +7,41 @@
 
 import Foundation
 
+enum ApiType {
+    case pokemonList(page: Int)
+    case characteristics(id: Int)
+    case evolution(id: Int)
+    case pokeDetail(value: String)
+    
+    private var baseUrl: String {
+        return "https://pokeapi.co/api/v2/"
+    }
+
+    private func getUrl() -> URL? {
+        switch self {
+        case .pokemonList(let page):
+            let offset = page == 0 ? 20 : page * 20
+            return URL(string: "\(baseUrl)pokemon/?offset\(offset)&limit=20")
+        case .characteristics(let id):
+            return URL(string: "\(baseUrl)characteristics/\(id)")
+        case .evolution(let id):
+            return URL(string: "\(baseUrl)evolution-chain/\(id)")
+        case .pokeDetail(let value):
+            return URL(string: "\(baseUrl)pokemon/\(value)")
+        }
+    }
+    
+    func request() -> URLRequest? {
+        guard let url = self.getUrl() else {
+            return nil
+        }
+
+        return URLRequest(url: url)
+    }
+}
+
 struct NetworkManager {
-    let baseStringUrl = "https://pokeapi.co/api/v2/" //pokemon?limit=100&offset=0
+
 }
 
 extension NetworkManager: NetworkProtocol {
